@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Villager Interaction</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            position: relative;
+            font-family: Arial, sans-serif;
+        }
+        img {
+            cursor: pointer;
+            width: 200px;
+            height: auto;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        img:hover {
+            transform: scale(1.1);
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        #clickCounter {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 20px;
+            padding: 10px 15px;
+            background-color: #fff;
+            border: 2px solid #ccc;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #muteButton {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .muted {
+            background-color: #e74c3c; /* Prime red color */
+        }
+
+        .unmuted {
+            background-color: #2ecc71; /* Lime greenish color */
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Create the villager image element
+        const villagerImage = document.createElement('img');
+        villagerImage.src = 'villager.png'; // Image file name
+        villagerImage.alt = 'Minecraft Villager';
+        villagerImage.id = 'villager';
+
+        // Create the audio element for villager sound
+        const villagerSound = document.createElement('audio');
+        villagerSound.src = 'villager-sound.mp3'; // The single sound file name
+        villagerSound.id = 'villagerSound';
+
+        // Append the image and audio to the body
+        document.body.appendChild(villagerImage);
+        document.body.appendChild(villagerSound);
+
+        // Create a counter to track clicks
+        let clickCount = 0;
+        const clickCounter = document.createElement('div');
+        clickCounter.id = 'clickCounter';
+        clickCounter.innerHTML = `Clicks: ${clickCount}`;
+        document.body.appendChild(clickCounter);
+
+        // Add event listener to the villager image to play the sound and shake on click
+        villagerImage.addEventListener('click', () => {
+            villagerSound.play();
+            clickCount++;
+            clickCounter.innerHTML = `Clicks: ${clickCount}`;
+
+            // Add shake animation
+            villagerImage.classList.add('shake');
+            setTimeout(() => villagerImage.classList.remove('shake'), 500);
+        });
+
+        // Background music
+        const backgroundMusic = document.createElement('audio');
+        backgroundMusic.src = 'background-music.mp3';
+        backgroundMusic.loop = true;
+        backgroundMusic.play();
+
+        // Mute/unmute button for background music
+        const muteButton = document.createElement('button');
+        muteButton.id = 'muteButton';
+        muteButton.innerHTML = "Unmuted"; // Default state is unmuted
+        muteButton.classList.add('unmuted');
+        document.body.appendChild(muteButton);
+
+        muteButton.addEventListener('click', () => {
+            backgroundMusic.muted = !backgroundMusic.muted;
+            if (backgroundMusic.muted) {
+                muteButton.innerHTML = "Muted";
+                muteButton.classList.remove('unmuted');
+                muteButton.classList.add('muted');
+            } else {
+                muteButton.innerHTML = "Unmuted";
+                muteButton.classList.remove('muted');
+                muteButton.classList.add('unmuted');
+            }
+        });
+    </script>
+</body>
+</html>
